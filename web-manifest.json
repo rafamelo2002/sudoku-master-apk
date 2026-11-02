@@ -1,0 +1,23 @@
+{
+  "name": "Sudoku Master",
+  "short_name": "Sudoku Maste",
+  "start_url": "https://ais-pre-sudokumaster-589460615465.us-east1.run.app",
+  "display": "fullscreen",
+  "background_color": "#0f172a",
+  "theme_color": "#eab308",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

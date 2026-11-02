@@ -1,0 +1,90 @@
+name: Compilar APK Android (Sudoku_Master)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Compilar APK Debug
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 1. Checkout do Código
+      uses: actions/checkout@v4
+
+    - name: 2. Configurar Java JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    - name: 3. Configurar Gradle 8.5
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: '8.5'
+
+    - name: 4. Aceitar Licenças do Android SDK
+      run: |
+        mkdir -p "${ANDROID_HOME}/licenses" || true
+        echo "24333f8a63b1d79430c42797200e3d1222116c99" > "${ANDROID_HOME}/licenses/android-sdk-license" || true
+        echo "84831b9409646a2a8e3f5b693550e427bc7f4b82" >> "${ANDROID_HOME}/licenses/android-sdk-license" || true
+        echo "d56f5187479451eabf01fb78af6dfcb131a6481e" >> "${ANDROID_HOME}/licenses/android-sdk-license" || true
+        echo "893fb8a22d82e1fc323e647049218624248240f5" > "${ANDROID_HOME}/licenses/android-sdk-preview-license" || true
+        yes | "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --licenses 2>/dev/null || true
+
+    - name: 5. Garantir Permissões de Execução
+      run: |
+        if [ -f "gradlew" ]; then
+          chmod +x gradlew || true
+        fi
+
+    - name: 6. Compilar APK com Gradle
+      run: |
+        if command -v gradle >/dev/null 2>&1; then
+          gradle assembleDebug --stacktrace --no-daemon
+        elif [ -f "./gradlew" ]; then
+          ./gradlew assembleDebug --stacktrace --no-daemon
+        else
+          echo "Gradle não encontrado"
+          exit 1
+        fi
+
+    - name: 7. Renomear e Organizar APK de saída
+      run: |
+        mkdir -p dist-apk
+        if [ -f "app/build/outputs/apk/debug/app-debug.apk" ]; then
+          cp app/build/outputs/apk/debug/app-debug.apk dist-apk/Sudoku_Master-debug.apk
+        else
+          find app/build -name "*.apk" -exec cp {} dist-apk/Sudoku_Master-debug.apk ; || true
+        fi
+
+    - name: 8. Fazer Upload do Arquivo APK para Download
+      uses: actions/upload-artifact@v4
+      with:
+        name: Sudoku_Master-Android-APK
+        path: dist-apk/Sudoku_Master-debug.apk
+        retention-days: 30
+
+    - name: 9. Criar Release com Link Direto do APK
+      continue-on-error: true
+      uses: softprops/action-gh-release@v2
+      with:
+        files: dist-apk/Sudoku_Master-debug.apk
+        tag_name: v1.0.0-build${{ github.run_number }}
+        name: "Sudoku Master v1.0.0 (.APK)"
+        body: |
+          ### 🎉 Seu APK Android foi compilado com sucesso!
+          - **Aplicativo:** Sudoku Master
+          - **Pacote:** `com.aistudio.sudokumaster`
+          - **Versão:** 1.0.0
+          - **URL Alvo:** https://ais-pre-sudokumaster-589460615465.us-east1.run.app
+          
+          Baixe o arquivo `Sudoku_Master-debug.apk` abaixo e instale diretamente no seu aparelho Android.
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

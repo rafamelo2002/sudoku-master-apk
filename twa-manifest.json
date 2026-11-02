@@ -1,0 +1,18 @@
+{
+  "packageId": "com.aistudio.sudokumaster",
+  "host": "ais-pre-sudokumaster-589460615465.us-east1.run.app",
+  "name": "Sudoku Master",
+  "launcherName": "Sudoku Maste",
+  "display": "fullscreen",
+  "themeColor": "#eab308",
+  "navigationColor": "#eab308",
+  "backgroundColor": "#0f172a",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "/icon-512.png",
+  "maskableIconUrl": "/icon-512.png",
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "Studio2APK"
+}
