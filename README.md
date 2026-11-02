@@ -2,6 +2,13 @@
 
 Gerado via **Studio2APK** para transformar seu aplicativo do Google AI Studio em app Android nativo.
 
+## 📱 Especificações do Android SDK
+- **Compile SDK**: 34 (Android 14)
+- **Target SDK**: 34 (Compatível com os requisitos do Google Play Store)
+- **Min SDK**: 24 (Suporta Android 7.0+ / 95.8%+ de todos os aparelhos ativos)
+- **Java JDK**: 17
+- **Gradle**: 8.7 / AGP 8.3.2
+
 ## 🚀 Como gerar seu arquivo .APK
 
 ### Opção 1: Compilação Automática via Linha de Comando (Sem abrir o Android Studio)
